@@ -43,9 +43,22 @@ export default async function BandPage({ params }: BandPageProps) {
 
   return (
     <main className="site-main">
-      <h1 className="site-main__title">{band.name}</h1>
-
-      <BandSocialLinks links={socials} />
+      <header className="band-hero">
+        {band.imageUrl ? (
+          <img
+            className="band-hero__avatar"
+            src={band.imageUrl}
+            alt=""
+            width={120}
+            height={120}
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="band-hero__avatar band-hero__avatar--placeholder" aria-hidden />
+        )}
+        <h1 className="band-hero__title">{band.name}</h1>
+        <BandSocialLinks links={socials} />
+      </header>
 
       {!band.acceptsPayments ? (
         <div className="stack-md">
