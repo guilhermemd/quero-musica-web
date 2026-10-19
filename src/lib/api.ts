@@ -19,6 +19,8 @@ export type PublicBandListItem = {
 };
 
 export type PublicBand = PublicBandListItem & {
+  phone: string | null;
+  showWhatsapp?: boolean;
   instagram: string | null;
   facebook: string | null;
   tiktok: string | null;

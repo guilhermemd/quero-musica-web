@@ -38,15 +38,34 @@ body {
   line-height: 1.55;
 }
 
-.site-main__meta {
-  margin: 1.25rem 0 0;
-  color: var(--muted);
-  font-size: 0.95rem;
+.band-socials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.15rem 0 0;
 }
 
-.site-main__meta a {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+.band-socials__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--color-graphite);
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    color: var(--color-orange);
+    border-color: color-mix(in srgb, var(--color-orange) 35%, var(--border));
+    background: var(--accent);
+  }
 }
 
 .stack-md {
@@ -59,7 +78,7 @@ body {
 
 .song-list {
   list-style: none;
-  margin: 2rem 0 0;
+  margin: 1.35rem 0 0;
   padding: 0;
   display: grid;
   gap: 0.75rem;

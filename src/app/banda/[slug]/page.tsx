@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { BandSocialLinks } from '@/components/BandSocialLinks';
 import { RequestSongDialog } from '@/components/RequestSongDialog';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
-import { fetchBandBySlug, formatGenre, formatPriceBRL } from '@/lib/api';
+import { fetchBandBySlug, formatGenre } from '@/lib/api';
+import { buildBandSocialLinks } from '@/lib/social';
 
 type BandPageProps = {
   params: Promise<{ slug: string }>;
@@ -37,35 +39,13 @@ export default async function BandPage({ params }: BandPageProps) {
     );
   }
 
-  const socials = [
-    { label: 'Instagram', href: band.instagram },
-    { label: 'Facebook', href: band.facebook },
-    { label: 'TikTok', href: band.tiktok },
-    { label: 'YouTube', href: band.youtube },
-  ].filter((item) => item.href);
-
-  const hasPrice = band.requestPriceCents > 0;
+  const socials = buildBandSocialLinks(band);
 
   return (
     <main className="site-main">
       <h1 className="site-main__title">{band.name}</h1>
-      <p className="site-main__lead">
-        Escolha uma música do repertório
-        {hasPrice ? ` · pedido ${formatPriceBRL(band.requestPriceCents)}` : ''}.
-      </p>
 
-      {socials.length > 0 ? (
-        <p className="site-main__meta">
-          {socials.map((item, index) => (
-            <span key={item.label}>
-              {index > 0 ? ' · ' : null}
-              <a href={item.href!} target="_blank" rel="noreferrer">
-                {item.label}
-              </a>
-            </span>
-          ))}
-        </p>
-      ) : null}
+      <BandSocialLinks links={socials} />
 
       {!band.acceptsPayments ? (
         <div className="stack-md">
