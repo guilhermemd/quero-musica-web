@@ -4,7 +4,7 @@ const STEPS = [
   {
     icon: Search,
     title: '1. Busque a banda',
-    description: 'Encontre a banda ideal para seu evento.',
+    description: 'Encontre a banda ou artista que você deseja.',
   },
   {
     icon: Music2,

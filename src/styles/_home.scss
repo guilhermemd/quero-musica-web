@@ -103,6 +103,12 @@
     white-space: nowrap;
   }
 
+  &__empty {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
   &__track {
     display: flex;
     gap: 0.85rem;
@@ -135,7 +141,10 @@
   }
 
   &__image {
+    display: block;
+    width: 100%;
     aspect-ratio: 1 / 0.92;
+    object-fit: cover;
     background: #d1d5db;
   }
 
