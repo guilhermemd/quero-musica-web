@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { BandSocialLinks } from '@/components/BandSocialLinks';
-import { RequestSongDialog } from '@/components/RequestSongDialog';
+import { BandSongCatalog } from '@/components/BandSongCatalog';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
-import { Badge } from '@/components/ui/Badge';
-import { fetchBandBySlug, formatGenre } from '@/lib/api';
+import { fetchBandBySlug, fetchBandSongs } from '@/lib/api';
 import { buildBandSocialLinks } from '@/lib/social';
 
 type BandPageProps = {
@@ -40,6 +39,7 @@ export default async function BandPage({ params }: BandPageProps) {
   }
 
   const socials = buildBandSocialLinks(band);
+  const initialSongs = await fetchBandSongs(slug, { page: 1, limit: 10 });
 
   return (
     <main className="site-main">
@@ -54,7 +54,10 @@ export default async function BandPage({ params }: BandPageProps) {
             referrerPolicy="no-referrer"
           />
         ) : (
-          <div className="band-hero__avatar band-hero__avatar--placeholder" aria-hidden />
+          <div
+            className="band-hero__avatar band-hero__avatar--placeholder"
+            aria-hidden
+          />
         )}
         <h1 className="band-hero__title">{band.name}</h1>
         <BandSocialLinks links={socials} />
@@ -70,37 +73,13 @@ export default async function BandPage({ params }: BandPageProps) {
         </div>
       ) : null}
 
-      {band.songs.length === 0 ? (
-        <div className="stack-md">
-          <Alert>
-            <AlertDescription>Nenhuma música cadastrada ainda.</AlertDescription>
-          </Alert>
-        </div>
-      ) : (
-        <ul className="song-list">
-          {band.songs.map((song) => (
-            <li key={song.id} className="song-item">
-              <div>
-                <p className="song-item__title">
-                  {song.name}
-                  <span className="song-item__artist"> - {song.artistName}</span>
-                </p>
-                <div className="song-item__meta">
-                  <Badge variant="secondary">{formatGenre(song.genre)}</Badge>
-                </div>
-              </div>
-              <RequestSongDialog
-                bandSlug={band.slug}
-                songId={song.id}
-                songName={song.name}
-                artistName={song.artistName}
-                priceCents={band.requestPriceCents}
-                enabled={band.acceptsPayments}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
+      <BandSongCatalog
+        bandSlug={band.slug}
+        priceCents={band.requestPriceCents}
+        acceptsPayments={band.acceptsPayments}
+        initialSongsCount={band.songsCount ?? initialSongs?.total ?? 0}
+        initialPage={initialSongs}
+      />
     </main>
   );
 }

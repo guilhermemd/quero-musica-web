@@ -25,7 +25,25 @@ export type PublicBand = PublicBandListItem & {
   facebook: string | null;
   tiktok: string | null;
   youtube: string | null;
-  songs: PublicSong[];
+  songsCount?: number;
+  /** @deprecated use fetchBandSongs — mantido opcional por compatibilidade */
+  songs?: PublicSong[];
+};
+
+export type PublicBandSongsPage = {
+  items: PublicSong[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  genres: string[];
+};
+
+export type FetchBandSongsParams = {
+  page?: number;
+  limit?: number;
+  genre?: string;
+  q?: string;
 };
 
 const GENRE_LABELS: Record<string, string> = {
@@ -97,6 +115,42 @@ export async function fetchBandBySlug(
     }
 
     return (await response.json()) as PublicBand;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchBandSongs(
+  slug: string,
+  params: FetchBandSongsParams = {},
+  init?: RequestInit,
+): Promise<PublicBandSongsPage | null> {
+  const search = new URLSearchParams();
+  if (params.page) search.set('page', String(params.page));
+  if (params.limit) search.set('limit', String(params.limit));
+  if (params.genre) search.set('genre', params.genre);
+  if (params.q?.trim()) search.set('q', params.q.trim());
+
+  const query = search.toString();
+  const url = `${API_URL}/bands/public/${encodeURIComponent(slug)}/songs${
+    query ? `?${query}` : ''
+  }`;
+
+  try {
+    const response = await fetch(url, {
+      cache: 'no-store',
+      ...init,
+    });
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as PublicBandSongsPage;
   } catch {
     return null;
   }
