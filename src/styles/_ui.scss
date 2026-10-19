@@ -1,0 +1,304 @@
+/* Estilos compartilhados dos componentes UI (equivalente às utilities do shadcn).
+   Tokens em _tokens.scss — variantes via classes + CVA no TSX. */
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  border-radius: calc(var(--radius) - 0.1rem);
+  border: 1px solid transparent;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease,
+    transform 0.15s ease;
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  &:not(:disabled):active {
+    transform: translateY(1px);
+  }
+
+  &--default {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  &--secondary {
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+
+  &--outline {
+    background: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--foreground);
+  }
+
+  &--destructive {
+    background: var(--destructive);
+    color: var(--destructive-foreground);
+  }
+
+  &--size-default {
+    height: 2.5rem;
+    padding: 0 1rem;
+    font-size: 0.925rem;
+  }
+
+  &--size-sm {
+    height: 2.1rem;
+    padding: 0 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  &--size-lg {
+    height: 2.85rem;
+    padding: 0 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+.ui-input,
+.ui-textarea {
+  display: flex;
+  width: 100%;
+  border: 1px solid var(--input);
+  border-radius: calc(var(--radius) - 0.1rem);
+  background: var(--card);
+  color: var(--foreground);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px rgb(249 115 22 / 20%);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.ui-input {
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+.ui-textarea {
+  min-height: 5rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  resize: vertical;
+  word-break: break-all;
+}
+
+.ui-label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+
+  &--default {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  &--secondary {
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+
+  &--outline {
+    background: transparent;
+    color: var(--foreground);
+    border-color: var(--border);
+  }
+
+  &--success {
+    background: var(--success);
+    color: var(--success-foreground);
+  }
+
+  &--warning {
+    background: var(--warning);
+    color: var(--warning-foreground);
+  }
+}
+
+.ui-alert {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.95rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: 0.925rem;
+  line-height: 1.45;
+
+  &--default {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border-color: rgb(249 115 22 / 22%);
+  }
+
+  &--warning {
+    background: var(--warning);
+    color: var(--warning-foreground);
+    border-color: rgb(154 52 18 / 18%);
+  }
+
+  &--destructive {
+    background: #fef2f2;
+    color: var(--destructive);
+    border-color: rgb(185 28 28 / 18%);
+  }
+
+  &__title {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &__description {
+    margin: 0;
+    opacity: 0.95;
+  }
+}
+
+.ui-dialog {
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgb(18 21 26 / 48%);
+    animation: ui-fade-in 0.15s ease;
+  }
+
+  &__content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 50;
+    width: min(calc(100vw - 2rem), 26rem);
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    transform: translate(-50%, -50%);
+    padding: 1.35rem;
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) + 0.15rem);
+    background: var(--card);
+    color: var(--card-foreground);
+    box-shadow: var(--shadow-md);
+    animation: ui-pop-in 0.18s ease;
+  }
+
+  &__header {
+    display: grid;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  &__description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.925rem;
+    line-height: 1.45;
+  }
+
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--secondary);
+      color: var(--foreground);
+    }
+  }
+}
+
+@keyframes ui-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-pop-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

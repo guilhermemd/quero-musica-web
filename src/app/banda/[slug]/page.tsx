@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
-import { RequestSongButton } from '@/components/RequestSongButton';
+import { RequestSongDialog } from '@/components/RequestSongDialog';
+import { Alert, AlertDescription } from '@/components/ui/Alert';
+import { Badge } from '@/components/ui/Badge';
 import { fetchBandBySlug, formatGenre, formatPriceBRL } from '@/lib/api';
 
 type BandPageProps = {
@@ -26,9 +28,11 @@ export default async function BandPage({ params }: BandPageProps) {
 
   if (!band) {
     return (
-      <main className="page">
-        <h1>{slug}</h1>
-        <p>Banda não encontrada ou ainda sem cadastro público.</p>
+      <main className="site-main">
+        <h1 className="site-main__title">{slug}</h1>
+        <p className="site-main__lead">
+          Banda não encontrada ou ainda sem cadastro público.
+        </p>
       </main>
     );
   }
@@ -43,15 +47,15 @@ export default async function BandPage({ params }: BandPageProps) {
   const hasPrice = band.requestPriceCents > 0;
 
   return (
-    <main className="page">
-      <h1>{band.name}</h1>
-      <p>
+    <main className="site-main">
+      <h1 className="site-main__title">{band.name}</h1>
+      <p className="site-main__lead">
         Escolha uma música do repertório
         {hasPrice ? ` · pedido ${formatPriceBRL(band.requestPriceCents)}` : ''}.
       </p>
 
       {socials.length > 0 ? (
-        <p className="notice">
+        <p className="site-main__meta">
           {socials.map((item, index) => (
             <span key={item.label}>
               {index > 0 ? ' · ' : null}
@@ -64,25 +68,35 @@ export default async function BandPage({ params }: BandPageProps) {
       ) : null}
 
       {!band.acceptsPayments ? (
-        <p className="notice warning">
-          Pedidos via Pix ainda não estão disponíveis para esta banda.
-        </p>
+        <div className="stack-md">
+          <Alert variant="warning">
+            <AlertDescription>
+              Pedidos via Pix ainda não estão disponíveis para esta banda.
+            </AlertDescription>
+          </Alert>
+        </div>
       ) : null}
 
       {band.songs.length === 0 ? (
-        <p className="notice">Nenhuma música cadastrada ainda.</p>
+        <div className="stack-md">
+          <Alert>
+            <AlertDescription>Nenhuma música cadastrada ainda.</AlertDescription>
+          </Alert>
+        </div>
       ) : (
         <ul className="song-list">
           {band.songs.map((song) => (
             <li key={song.id} className="song-item">
               <div>
-                <strong>
+                <p className="song-item__title">
                   {song.name}
-                  <span className="song-artist"> - {song.artistName}</span>
-                </strong>
-                <div className="song-meta">{formatGenre(song.genre)}</div>
+                  <span className="song-item__artist"> - {song.artistName}</span>
+                </p>
+                <div className="song-item__meta">
+                  <Badge variant="secondary">{formatGenre(song.genre)}</Badge>
+                </div>
               </div>
-              <RequestSongButton
+              <RequestSongDialog
                 bandSlug={band.slug}
                 songId={song.id}
                 songName={song.name}

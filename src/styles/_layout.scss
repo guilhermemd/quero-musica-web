@@ -1,0 +1,58 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid rgb(216 222 230 / 80%);
+  background: rgb(255 255 255 / 82%);
+  backdrop-filter: blur(10px);
+
+  &__inner {
+    width: min(100%, 44rem);
+    margin: 0 auto;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__brand {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  &__toca {
+    color: var(--color-graphite);
+  }
+
+  &__som {
+    color: var(--color-orange);
+  }
+
+  &__hint {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+.request-song-dialog {
+  &__form {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  &__error {
+    margin: 0;
+    color: var(--destructive);
+    font-size: 0.875rem;
+  }
+
+  &__paid {
+    display: grid;
+    gap: 0.75rem;
+  }
+}

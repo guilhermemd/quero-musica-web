@@ -1,0 +1,34 @@
+:root {
+  /* Paleta oficial Quero Música */
+  --color-orange: #f97316;
+  --color-graphite: #1f2933;
+  --color-gray: #64748b;
+  --color-bg: #fafaf8;
+
+  --background: var(--color-bg);
+  --foreground: var(--color-graphite);
+  --muted: var(--color-gray);
+  --muted-foreground: #94a3b8;
+  --card: #ffffff;
+  --card-foreground: var(--color-graphite);
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: var(--color-orange);
+  --primary: var(--color-orange);
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: var(--color-graphite);
+  --accent: #fff7ed;
+  --accent-foreground: #c2410c;
+  --destructive: #dc2626;
+  --destructive-foreground: #fff7f7;
+  --warning: #fff7ed;
+  --warning-foreground: #c2410c;
+  --success: #ecfdf5;
+  --success-foreground: #047857;
+  --radius: 0.625rem;
+  --font-sans: var(--font-inter), 'Inter', sans-serif;
+  --font-display: var(--font-inter), 'Inter', sans-serif;
+  --shadow-sm: 0 1px 2px rgb(31 41 51 / 6%);
+  --shadow-md: 0 10px 30px rgb(31 41 51 / 8%);
+}

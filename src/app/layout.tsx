@@ -1,27 +1,27 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import './globals.css';
+import { Inter } from 'next/font/google';
+import '@/styles/globals.scss';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: {
-    default: 'Quero Música',
-    template: '%s | Quero Música',
+    default: 'tocasom',
+    template: '%s | tocasom',
   },
-  description: 'Peça músicas para bandas via Pix.',
+  description: 'Peça músicas para bandas via Pix — tocasom.com.br',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body>
-        <div className="shell">
-          <header className="site-header">
-            <a href="/" className="brand">
-              Quero Música
-            </a>
-          </header>
-          {children}
-        </div>
+      <body className={`${inter.variable} ${inter.className}`}>
+        <div className="shell">{children}</div>
       </body>
     </html>
   );
