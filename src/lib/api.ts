@@ -13,6 +13,7 @@ export type PublicBand = {
   name: string;
   slug: string;
   requestPriceCents: number;
+  acceptsPayments: boolean;
   instagram: string | null;
   facebook: string | null;
   tiktok: string | null;

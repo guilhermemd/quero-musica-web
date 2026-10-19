@@ -70,6 +70,7 @@ a {
 .song-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
   padding: 1rem 1.1rem;
   background: var(--surface);
@@ -82,6 +83,12 @@ a {
   font-size: 0.9rem;
 }
 
+.song-artist {
+  font-weight: 400;
+  font-size: 0.85em;
+  color: var(--muted);
+}
+
 .notice {
   margin-top: 1.5rem;
   padding: 1rem;
@@ -90,4 +97,90 @@ a {
   color: #115e59;
   font-family: system-ui, sans-serif;
   font-size: 0.95rem;
+}
+
+.notice.warning {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.song-action {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.song-action:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.song-action.secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.request-box {
+  width: min(100%, 280px);
+  display: grid;
+  gap: 0.6rem;
+  font-family: system-ui, sans-serif;
+}
+
+.request-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.request-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.request-label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.request-label input {
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.request-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.85rem;
+}
+
+.pix-code {
+  width: 100%;
+  resize: vertical;
+  padding: 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.75rem;
+  word-break: break-all;
 }

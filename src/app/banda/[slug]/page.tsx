@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { RequestSongButton } from '@/components/RequestSongButton';
 import { fetchBandBySlug, formatGenre, formatPriceBRL } from '@/lib/api';
 
 type BandPageProps = {
@@ -62,6 +63,12 @@ export default async function BandPage({ params }: BandPageProps) {
         </p>
       ) : null}
 
+      {!band.acceptsPayments ? (
+        <p className="notice warning">
+          Pedidos via Pix ainda não estão disponíveis para esta banda.
+        </p>
+      ) : null}
+
       {band.songs.length === 0 ? (
         <p className="notice">Nenhuma música cadastrada ainda.</p>
       ) : (
@@ -69,11 +76,20 @@ export default async function BandPage({ params }: BandPageProps) {
           {band.songs.map((song) => (
             <li key={song.id} className="song-item">
               <div>
-                <strong>{song.name}</strong>
-                <div className="song-meta">
-                  {song.artistName} · {formatGenre(song.genre)}
-                </div>
+                <strong>
+                  {song.name}
+                  <span className="song-artist"> - {song.artistName}</span>
+                </strong>
+                <div className="song-meta">{formatGenre(song.genre)}</div>
               </div>
+              <RequestSongButton
+                bandSlug={band.slug}
+                songId={song.id}
+                songName={song.name}
+                artistName={song.artistName}
+                priceCents={band.requestPriceCents}
+                enabled={band.acceptsPayments}
+              />
             </li>
           ))}
         </ul>
