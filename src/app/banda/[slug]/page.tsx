@@ -39,7 +39,7 @@ export default async function BandPage({ params }: BandPageProps) {
   }
 
   const socials = buildBandSocialLinks(band);
-  const initialSongs = await fetchBandSongs(slug, { page: 1, limit: 10 });
+  const initialSongs = await fetchBandSongs(slug, { page: 1, limit: 20 });
 
   return (
     <main className="site-main">
