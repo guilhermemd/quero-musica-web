@@ -15,7 +15,7 @@ const STEPS = [
     icon: QrCode,
     title: '3. Pague no Pix e a banda toca',
     description:
-      'Pague com Pix com segurança e a banda confirma e toca no seu evento.',
+      'Pague com Pix com segurança e a banda confirma e toca no seu pedido.',
   },
 ] as const;
 
