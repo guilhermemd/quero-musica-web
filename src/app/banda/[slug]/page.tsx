@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { BandSocialLinks } from '@/components/BandSocialLinks';
 import { BandSongCatalog } from '@/components/BandSongCatalog';
-import { PartyTipDialog } from '@/components/PartyTipDialog';
+import { PartyTipBanner } from '@/components/PartyTipBanner';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
 import { fetchBandBySlug, fetchBandSongs } from '@/lib/api';
 import { buildBandSocialLinks } from '@/lib/social';
@@ -74,14 +74,13 @@ export default async function BandPage({ params }: BandPageProps) {
         </div>
       ) : null}
 
-      {band.partyTipsEnabled && band.acceptsPayments ? (
-        <div className="party-tip-banner">
-          <PartyTipDialog
-            bandSlug={band.slug}
-            bandName={band.name}
-            minAmountCents={band.partyTipsMinCents ?? 500}
-          />
-        </div>
+      {band.acceptsPayments ? (
+        <PartyTipBanner
+          bandSlug={band.slug}
+          bandName={band.name}
+          minAmountCents={band.partyTipsMinCents ?? 500}
+          initiallyEnabled={Boolean(band.partyTipsEnabled)}
+        />
       ) : null}
 
       <BandSongCatalog

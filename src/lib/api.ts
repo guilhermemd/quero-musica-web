@@ -104,7 +104,6 @@ export async function fetchBandBySlug(
   slug: string,
 ): Promise<PublicBand | null> {
   try {
-    // Cache curto: festa/preço mudam no admin; o dialog da festa também refresca o mínimo ao abrir
     const response = await fetch(`${API_URL}/bands/public/${slug}`, {
       next: { revalidate: 10 },
     });
