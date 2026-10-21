@@ -21,6 +21,8 @@ export type PublicBandListItem = {
 export type PublicBand = PublicBandListItem & {
   phone: string | null;
   showWhatsapp?: boolean;
+  partyTipsEnabled?: boolean;
+  partyTipsMinCents?: number;
   instagram: string | null;
   facebook: string | null;
   tiktok: string | null;
@@ -102,8 +104,9 @@ export async function fetchBandBySlug(
   slug: string,
 ): Promise<PublicBand | null> {
   try {
+    // Cache curto: festa/preço mudam no admin; o dialog da festa também refresca o mínimo ao abrir
     const response = await fetch(`${API_URL}/bands/public/${slug}`, {
-      next: { revalidate: 60 },
+      next: { revalidate: 10 },
     });
 
     if (response.status === 404) {

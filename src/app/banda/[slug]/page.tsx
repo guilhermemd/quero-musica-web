@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { BandSocialLinks } from '@/components/BandSocialLinks';
 import { BandSongCatalog } from '@/components/BandSongCatalog';
+import { PartyTipDialog } from '@/components/PartyTipDialog';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
 import { fetchBandBySlug, fetchBandSongs } from '@/lib/api';
 import { buildBandSocialLinks } from '@/lib/social';
@@ -70,6 +71,16 @@ export default async function BandPage({ params }: BandPageProps) {
               Pedidos via Pix ainda não estão disponíveis para esta banda.
             </AlertDescription>
           </Alert>
+        </div>
+      ) : null}
+
+      {band.partyTipsEnabled && band.acceptsPayments ? (
+        <div className="party-tip-banner">
+          <PartyTipDialog
+            bandSlug={band.slug}
+            bandName={band.name}
+            minAmountCents={band.partyTipsMinCents ?? 500}
+          />
         </div>
       ) : null}
 

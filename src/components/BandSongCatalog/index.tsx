@@ -1,6 +1,6 @@
 'use client';
 
-import { Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { RequestSongDialog } from '@/components/RequestSongDialog';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
@@ -179,10 +179,12 @@ export function BandSongCatalog({
             type="button"
             variant="outline"
             size="sm"
+            className="band-catalog__page-btn"
             disabled={page <= 1 || isPending}
+            aria-label="Página anterior"
             onClick={() => setPage((current) => Math.max(1, current - 1))}
           >
-            Anterior
+            <ChevronLeft size={18} aria-hidden />
           </Button>
           <p className="band-catalog__page">
             Página {page} de {totalPages}
@@ -192,12 +194,14 @@ export function BandSongCatalog({
             type="button"
             variant="outline"
             size="sm"
+            className="band-catalog__page-btn"
             disabled={page >= totalPages || isPending}
+            aria-label="Próxima página"
             onClick={() =>
               setPage((current) => Math.min(totalPages, current + 1))
             }
           >
-            Próxima
+            <ChevronRight size={18} aria-hidden />
           </Button>
         </div>
       ) : null}
