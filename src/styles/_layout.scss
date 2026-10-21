@@ -45,10 +45,22 @@
     gap: 0.9rem;
   }
 
+  &__field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  &__hint {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
   &__error {
     margin: 0;
     color: var(--destructive);
-    font-size: 0.875rem;
+    font-size: 0.8rem;
   }
 
   &__paid {

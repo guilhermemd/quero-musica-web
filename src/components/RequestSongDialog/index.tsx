@@ -1,7 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { formatPriceBRL, getApiUrl } from '@/lib/api';
+import {
+  formatCentsAsMoneyMask,
+  formatMoneyMask,
+  formatPriceBRL,
+  getApiUrl,
+  MONEY_MASK_MAX_LENGTH,
+  parseReaisToCents,
+} from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import {
   Dialog,
@@ -46,8 +53,13 @@ export function RequestSongDialog({
   const songLabel = artistName ? `${songName} - ${artistName}` : songName;
   const [open, setOpen] = useState(false);
   const [requesterName, setRequesterName] = useState('');
+  const [amountInput, setAmountInput] = useState(
+    formatCentsAsMoneyMask(priceCents),
+  );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [amountError, setAmountError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [order, setOrder] = useState<CreatedOrder | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -87,16 +99,51 @@ export function RequestSongDialog({
 
   function resetState() {
     setRequesterName('');
-    setError(null);
+    setAmountInput(formatCentsAsMoneyMask(priceCents));
+    setNameError(null);
+    setAmountError(null);
+    setSubmitError(null);
     setOrder(null);
     setCopied(false);
     setLoading(false);
   }
 
+  function validateFields() {
+    const trimmedName = requesterName.trim();
+    let nextNameError: string | null = null;
+    let nextAmountError: string | null = null;
+
+    if (!trimmedName) {
+      nextNameError = 'Informe seu nome';
+    } else if (trimmedName.length < 2) {
+      nextNameError = 'Nome precisa ter pelo menos 2 caracteres';
+    }
+
+    const amountCents = parseReaisToCents(amountInput);
+    if (amountCents === null) {
+      nextAmountError = 'Informe um valor válido';
+    } else if (amountCents < priceCents) {
+      nextAmountError = `O valor mínimo é ${formatPriceBRL(priceCents)}`;
+    }
+
+    setNameError(nextNameError);
+    setAmountError(nextAmountError);
+
+    return {
+      ok: !nextNameError && !nextAmountError,
+      trimmedName,
+      amountCents,
+    };
+  }
+
   async function handleCreateOrder() {
+    setSubmitError(null);
+    const { ok, trimmedName, amountCents } = validateFields();
+    if (!ok || amountCents === null) {
+      return;
+    }
+
     setLoading(true);
-    setError(null);
-    setCopied(false);
 
     try {
       const response = await fetch(`${getApiUrl()}/orders/public`, {
@@ -105,7 +152,8 @@ export function RequestSongDialog({
         body: JSON.stringify({
           bandSlug,
           songId,
-          requesterName: requesterName.trim(),
+          requesterName: trimmedName,
+          amountCents,
         }),
       });
 
@@ -116,7 +164,9 @@ export function RequestSongDialog({
 
       setOrder(JSON.parse(body) as CreatedOrder);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao criar pedido');
+      setSubmitError(
+        err instanceof Error ? err.message : 'Falha ao criar pedido',
+      );
     } finally {
       setLoading(false);
     }
@@ -145,6 +195,8 @@ export function RequestSongDialog({
         setOpen(next);
         if (!next) {
           resetState();
+        } else {
+          setAmountInput(formatCentsAsMoneyMask(priceCents));
         }
       }}
     >
@@ -159,24 +211,54 @@ export function RequestSongDialog({
             <DialogHeader>
               <DialogTitle>Pedir música</DialogTitle>
               <DialogDescription>
-                “{songLabel}” · {formatPriceBRL(priceCents)}
+                “{songLabel}” · mínimo {formatPriceBRL(priceCents)}
               </DialogDescription>
             </DialogHeader>
             <div className="request-song-dialog__form">
-              <Label htmlFor={`requester-${songId}`}>
-                Seu nome
+              <div className="request-song-dialog__field">
+                <Label htmlFor={`requester-${songId}`}>Seu nome</Label>
                 <Input
                   id={`requester-${songId}`}
-                  required
-                  minLength={2}
                   maxLength={80}
                   value={requesterName}
-                  onChange={(event) => setRequesterName(event.target.value)}
+                  aria-invalid={Boolean(nameError)}
+                  onChange={(event) => {
+                    setRequesterName(event.target.value);
+                    if (nameError) setNameError(null);
+                  }}
                   placeholder="Como a banda te chama?"
                 />
-              </Label>
-              {error ? (
-                <p className="request-song-dialog__error">{error}</p>
+                {nameError ? (
+                  <p className="request-song-dialog__error">{nameError}</p>
+                ) : null}
+              </div>
+
+              <div className="request-song-dialog__field">
+                <Label htmlFor={`amount-${songId}`}>Valor do Pix (R$)</Label>
+                <Input
+                  id={`amount-${songId}`}
+                  inputMode="numeric"
+                  autoComplete="off"
+                  maxLength={MONEY_MASK_MAX_LENGTH}
+                  value={amountInput}
+                  aria-invalid={Boolean(amountError)}
+                  onChange={(event) => {
+                    setAmountInput(formatMoneyMask(event.target.value));
+                    if (amountError) setAmountError(null);
+                  }}
+                  placeholder={formatCentsAsMoneyMask(priceCents)}
+                />
+                {amountError ? (
+                  <p className="request-song-dialog__error">{amountError}</p>
+                ) : (
+                  <p className="request-song-dialog__hint">
+                    Você pode contribuir com um valor maior que o mínimo.
+                  </p>
+                )}
+              </div>
+
+              {submitError ? (
+                <p className="request-song-dialog__error">{submitError}</p>
               ) : null}
             </div>
             <DialogFooter>
@@ -191,7 +273,7 @@ export function RequestSongDialog({
               <Button
                 type="button"
                 onClick={() => void handleCreateOrder()}
-                disabled={loading || requesterName.trim().length < 2}
+                disabled={loading}
               >
                 {loading ? 'Gerando Pix...' : 'Gerar Pix'}
               </Button>

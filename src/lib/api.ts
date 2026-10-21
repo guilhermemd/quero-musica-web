@@ -163,6 +163,37 @@ export function formatPriceBRL(priceCents: number) {
   }).format(priceCents / 100);
 }
 
+const MONEY_CENTS_MAX = 1_000_000;
+const MONEY_DIGITS_MAX = String(MONEY_CENTS_MAX).length;
+export const MONEY_MASK_MAX_LENGTH = 10;
+
+function moneyDigits(value: string) {
+  return value.replace(/\D/g, '').slice(0, MONEY_DIGITS_MAX);
+}
+
+export function formatCentsAsMoneyMask(cents: number): string {
+  if (!Number.isFinite(cents) || cents <= 0) return '';
+  const capped = Math.min(Math.trunc(cents), MONEY_CENTS_MAX);
+  return new Intl.NumberFormat('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(capped / 100);
+}
+
+export function formatMoneyMask(value: string): string {
+  const digits = moneyDigits(value);
+  if (!digits) return '';
+  return formatCentsAsMoneyMask(Number.parseInt(digits, 10));
+}
+
+export function parseReaisToCents(value: string): number | null {
+  const digits = moneyDigits(value);
+  if (!digits) return null;
+  const cents = Number.parseInt(digits, 10);
+  if (!Number.isFinite(cents) || cents <= 0) return null;
+  return Math.min(cents, MONEY_CENTS_MAX);
+}
+
 export function formatGenre(genre: string | null | undefined) {
   if (!genre) return 'Sem categoria';
   return GENRE_LABELS[genre] ?? genre;
