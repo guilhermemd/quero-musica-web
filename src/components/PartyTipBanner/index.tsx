@@ -8,7 +8,6 @@ type PartyTipBannerProps = {
   bandSlug: string;
   bandName: string;
   minAmountCents: number;
-  /** Valor do SSR (pode estar em cache); o client confirma na hora */
   initiallyEnabled: boolean;
 };
 
@@ -53,7 +52,7 @@ export function PartyTipBanner({
           setMinCents(band.partyTipsMinCents);
         }
       } catch {
-        // mantém o estado do SSR
+        // mantém SSR se a confirmação falhar
       } finally {
         if (!cancelled) setReady(true);
       }

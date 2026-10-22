@@ -92,7 +92,7 @@ export function PartyTipDialog({
           });
         }
       } catch {
-        // mantém o mínimo já conhecido
+        /* mantém mínimo conhecido */
       }
     };
 
@@ -122,7 +122,7 @@ export function PartyTipDialog({
           setTip(next);
         }
       } catch {
-        // silencioso durante o polling
+        /* polling */
       }
     };
 

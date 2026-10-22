@@ -82,7 +82,7 @@ export function RequestSongDialog({
           setOrder(next);
         }
       } catch {
-        // silencioso durante o polling
+        /* polling */
       }
     };
 

@@ -28,8 +28,6 @@ export type PublicBand = PublicBandListItem & {
   tiktok: string | null;
   youtube: string | null;
   songsCount?: number;
-  /** @deprecated use fetchBandSongs — mantido opcional por compatibilidade */
-  songs?: PublicSong[];
 };
 
 export type PublicBandSongsPage = {

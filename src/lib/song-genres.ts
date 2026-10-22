@@ -1,4 +1,3 @@
-/** Mesma lista de categorias usada para bandas. */
 export const SONG_GENRES = [
   { value: 'ROCK', label: 'Rock' },
   { value: 'FOLK', label: 'Folk' },
