@@ -20,6 +20,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/Dialog';
 import { Input } from '@/components/ui/Input';
+import { publicActionError } from '@/lib/public-error';
 import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
 
@@ -198,7 +199,9 @@ export function PartyTipDialog({
 
       const body = await response.text();
       if (!response.ok) {
-        throw new Error(body || `Erro ${response.status}`);
+        throw new Error(
+          publicActionError(body, 'Não foi possível gerar a contribuição.'),
+        );
       }
 
       setTip(JSON.parse(body) as CreatedTip);
